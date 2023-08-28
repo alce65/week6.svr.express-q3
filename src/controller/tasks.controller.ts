@@ -1,42 +1,67 @@
-import { readFile, writeFile } from 'fs/promises';
+/* eslint-disable no-unused-vars */
+import { Response, Request, NextFunction } from 'express';
+import { ControllerStructure } from './controller.interface';
+import { Repository } from '../repository/repository';
+import { Task } from '../entities/task';
+import { TasksFsRepository } from '../repository/tasks.fs.repository';
+import createDebug from 'debug';
+const debug = createDebug('W6E:Controller:TasksController');
 
-import { Response, Request } from 'express';
-
-export class TaskController {
-  async getAll(req: Request, res: Response) {
-    const data = JSON.parse(await readFile('data.json', { encoding: 'utf-8' }));
-    res.json(data);
+export class TaskController implements ControllerStructure {
+  // Alt repo: TasksFsRepository;
+  constructor(private repo: Repository<Task>) {
+    // Alt this.repo = repo;
+    debug('Instantiated');
   }
 
-  async getById(req: Request, res: Response) {
-    const { id } = req.params;
-    const data: any[] = JSON.parse(
-      await readFile('data.json', { encoding: 'utf-8' })
-    );
-    const item = data.filter((item) => item.id === Number(id));
-    res.json(item);
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await this.repo.getAll();
+      res.json(data);
+    } catch (error) {
+      // ALt const error = new Error()
+      next(error);
+    }
   }
 
-  async create(req: Request, res: Response) {
-    const newData = req.body;
-    newData.id = crypto.randomUUID();
-    const data: any[] = JSON.parse(
-      await readFile('data.json', { encoding: 'utf-8' })
-    );
-    data.push(newData);
-
-    await writeFile('data.json', JSON.stringify(data), { encoding: 'utf-8' });
-
-    res.json(newData);
+  async getById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const data = await this.repo.getById(id);
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
   }
 
-  update(req: Request, res: Response) {
-    const { id } = req.params;
-    res.send(`Patch Task id: ${id}`);
+  async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const finalTask = await this.repo.create(req.body);
+      res.status(201);
+      res.json(finalTask);
+    } catch (error) {
+      next(error);
+    }
   }
 
-  delete(req: Request, res: Response) {
-    const { id } = req.params;
-    res.send(`Delete Task id: ${id}`);
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const finalTask = await this.repo.update(id, req.body);
+      res.json(finalTask);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      await this.repo.delete(id);
+      res.status(204);
+      res.json({});
+    } catch (error) {
+      next(error);
+    }
   }
 }

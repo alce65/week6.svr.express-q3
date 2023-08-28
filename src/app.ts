@@ -3,10 +3,12 @@ import cors from 'cors';
 import morgan from 'morgan';
 import createDebug from 'debug';
 import { taskRouter } from './router/task.router.js';
+import { errorMiddleware } from './middleware/error.middleware.js';
 
 const debug = createDebug('W6E:App');
-
 export const app = express();
+
+debug('Started');
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -27,3 +29,5 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/tasks', taskRouter);
+
+app.use(errorMiddleware);
