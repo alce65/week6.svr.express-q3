@@ -1,1 +1,7 @@
-[{"id":"2","title":"Test otra vez"},{"name":"Reunión con Ernestina","id":"2326e589-4c6c-4f32-9082-474d3a055981"}]
+[
+  { "id": "2", "title": "Test otra vez" },
+  {
+    "name": "Reunión con Ernestina",
+    "id": "2326e589-4c6c-4f32-9082-474d3a055981"
+  }
+]
