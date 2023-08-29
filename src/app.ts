@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import createDebug from 'debug';
 import { taskRouter } from './router/task.router.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
+import { noteRouter } from './router/note.router.js';
 
 const debug = createDebug('W6E:App');
 export const app = express();
@@ -29,5 +30,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/tasks', taskRouter);
+app.use('/notes', noteRouter);
 
 app.use(errorMiddleware);
