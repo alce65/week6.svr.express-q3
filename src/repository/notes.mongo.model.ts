@@ -10,13 +10,22 @@ const noteSchema = new Schema<Note>({
     unique: true,
   },
   author: {
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   isImportant: {
     type: Boolean,
     required: true,
     default: false,
+  },
+});
+
+noteSchema.set('toJSON', {
+  transform(_document, returnedObject) {
+    returnedObject.id = returnedObject._id;
+    delete returnedObject._id;
+    delete returnedObject.__v;
+    delete returnedObject.passwd;
   },
 });
 

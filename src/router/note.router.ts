@@ -12,6 +12,6 @@ export const noteRouter = createRouter();
 
 noteRouter.get('/', noteController.getAll.bind(noteController));
 noteRouter.get('/:id', noteController.getById.bind(noteController));
-noteRouter.post('/', noteController.create.bind(noteController));
+noteRouter.post('/:userId', noteController.create.bind(noteController));
 noteRouter.patch('/:id', noteController.update.bind(noteController));
 noteRouter.delete('/:id', noteController.delete.bind(noteController));

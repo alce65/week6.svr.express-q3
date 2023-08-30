@@ -1,6 +1,4 @@
-export type WithId = {
-  id: string;
-};
+import { WithId } from '../types/id.js';
 
 export type TaskNoId = {
   title: string;

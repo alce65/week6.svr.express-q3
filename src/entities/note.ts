@@ -1,8 +1,9 @@
-import { WithId } from './task';
+import { WithId } from '../types/id.js';
+import { User } from './user.js';
 
 export type NoteNoId = {
   title: string;
-  author: string;
+  author: User;
   isImportant: boolean;
 };
 

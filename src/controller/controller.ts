@@ -35,9 +35,9 @@ export abstract class Controller<T extends { id: string | number }> {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const finalTask = await this.repo.create(req.body);
+      const finalItem = await this.repo.create(req.body);
       res.status(201);
-      res.json(finalTask);
+      res.json(finalItem);
     } catch (error) {
       next(error);
     }
@@ -46,8 +46,8 @@ export abstract class Controller<T extends { id: string | number }> {
   async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const finalTask = await this.repo.update(id, req.body);
-      res.json(finalTask);
+      const finalItem = await this.repo.update(id, req.body);
+      res.json(finalItem);
     } catch (error) {
       next(error);
     }
