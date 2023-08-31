@@ -14,9 +14,9 @@ export class NotesController extends Controller<Note> {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { userId } = req.params;
+      const { validatedId } = req.body;
       const userRepo = new UsersMongoRepository();
-      const user = await userRepo.getById(userId);
+      const user = await userRepo.getById(validatedId);
       req.body.author = user.id;
       const finalNote = await this.repo.create(req.body);
       user.notes.push(finalNote);

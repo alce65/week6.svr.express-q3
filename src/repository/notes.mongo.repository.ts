@@ -11,7 +11,12 @@ export class NotesMongoRepository implements Repository<Note> {
   }
 
   async getAll(): Promise<Note[]> {
-    const data = await NoteModel.find().exec();
+    const data = await NoteModel.find()
+      .populate('author', {
+        userName: 1,
+        email: 1,
+      })
+      .exec();
     return data;
   }
 

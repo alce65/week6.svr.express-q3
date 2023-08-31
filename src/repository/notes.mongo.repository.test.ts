@@ -4,13 +4,16 @@ import { NoteModel } from './notes.mongo.model.js';
 jest.mock('./notes.mongo.model.js');
 
 describe('Given the class NotesMongoRepository', () => {
+  let repo: NotesMongoRepository;
+  beforeEach(() => {
+    repo = new NotesMongoRepository();
+  });
+
   describe('When we instantiate it and all is OK', () => {
     const mockExec = jest.fn().mockResolvedValue([]);
     NoteModel.find = jest.fn().mockReturnValue({
       exec: mockExec,
     });
-
-    const repo = new NotesMongoRepository();
 
     test('We should use getAll', async () => {
       const result = await repo.getAll();
@@ -24,8 +27,6 @@ describe('Given the class NotesMongoRepository', () => {
     NoteModel.findById = jest.fn().mockReturnValue({
       exec: mockExec,
     });
-
-    const repo = new NotesMongoRepository();
 
     test('We should get an error if we use getById', () => {
       expect(repo.getById('')).rejects.toThrow();
