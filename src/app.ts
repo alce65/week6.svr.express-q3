@@ -6,6 +6,7 @@ import { taskRouter } from './router/task.router.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
 import { noteRouter } from './router/note.router.js';
 import { userRouter } from './router/user.router.js';
+import { HttpError } from './types/http.error.js';
 
 const debug = createDebug('W6E:App');
 export const app = express();
@@ -33,5 +34,10 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/tasks', taskRouter);
 app.use('/notes', noteRouter);
 app.use('/users', userRouter);
+
+app.use('/:id', (req: Request, res: Response, next: NextFunction) => {
+  const error = new HttpError(418, "I'm a teapot", 'Invalid route');
+  next(error);
+});
 
 app.use(errorMiddleware);

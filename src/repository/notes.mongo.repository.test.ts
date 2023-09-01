@@ -12,7 +12,9 @@ describe('Given the class NotesMongoRepository', () => {
   describe('When we instantiate it and all is OK', () => {
     const mockExec = jest.fn().mockResolvedValue([]);
     NoteModel.find = jest.fn().mockReturnValue({
-      exec: mockExec,
+      populate: jest.fn().mockReturnValue({
+        exec: mockExec,
+      }),
     });
 
     test('We should use getAll', async () => {
