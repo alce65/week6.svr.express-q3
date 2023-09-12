@@ -15,6 +15,7 @@ describe('Given the class NotesMongoRepository', () => {
       populate: jest.fn().mockReturnValue({
         exec: mockExec,
       }),
+      exec: mockExec,
     });
 
     test('We should use getAll', async () => {

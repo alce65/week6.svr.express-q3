@@ -21,7 +21,12 @@ export class NotesMongoRepository implements Repository<Note> {
   }
 
   async getById(id: string): Promise<Note> {
-    const data = await NoteModel.findById(id).exec();
+    const data = await NoteModel.findById(id)
+      .populate('author', {
+        userName: 1,
+        email: 1,
+      })
+      .exec();
     if (!data)
       throw new HttpError(404, 'Not Found', 'Task not found in file system', {
         cause: 'Trying getById',
@@ -37,7 +42,12 @@ export class NotesMongoRepository implements Repository<Note> {
   async update(id: string, newData: Partial<Note>): Promise<Note> {
     const data = await NoteModel.findByIdAndUpdate(id, newData, {
       new: true,
-    }).exec();
+    })
+      .populate('author', {
+        userName: 1,
+        email: 1,
+      })
+      .exec();
     if (!data)
       throw new HttpError(404, 'Not Found', 'Task not found in file system', {
         cause: 'Trying update',
