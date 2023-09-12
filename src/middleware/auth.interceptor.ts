@@ -13,7 +13,7 @@ debug('Loaded');
 
 export class AuthInterceptor {
   authorization(req: Request, _res: Response, next: NextFunction) {
-    debug('Call interceptor');
+    debug('Call authorization');
     try {
       const token = req.get('Authorization')?.split(' ')[1];
       if (!token) {
@@ -22,7 +22,7 @@ export class AuthInterceptor {
 
       const { id } = Auth.verifyJWTGettingPayload(token);
       req.body.validatedId = id;
-      debug(id);
+      debug('ID from token:', id);
       next();
     } catch (error) {
       next(error);
@@ -30,12 +30,14 @@ export class AuthInterceptor {
   }
 
   async notesAuthentication(req: Request, _res: Response, next: NextFunction) {
+    debug('Call notesAuthentication');
     const userID = req.body.validatedId;
     const noteID = req.params.id;
 
     try {
       const notesRepo = new NotesMongoRepository();
       const note = await notesRepo.getById(noteID);
+
       if (note.author.id !== userID) {
         const error = new HttpError(403, 'Forbidden', 'Not note owner');
         next(error);
